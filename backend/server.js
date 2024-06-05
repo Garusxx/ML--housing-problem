@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.get("/", (req, res) => {
-  res.send("Helssslo World!");
+  res.send("Yesss World!");
 });
 
 app.get("/getHousing", async (req, res) => {
