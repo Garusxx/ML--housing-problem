@@ -1,5 +1,5 @@
 import Sliders from "../components/Sliders";
-import Chart from "../components/Chart";
+import Charts from "../components/Charts";
 
 const Home = () => {
   return (
@@ -9,7 +9,7 @@ const Home = () => {
           Home Price Calculator
         </h1>
         <div className="flex justify-center space-x-4">
-          <Chart />
+          <Charts />
           <Sliders />
         </div>
       </div>

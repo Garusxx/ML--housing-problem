@@ -7,10 +7,10 @@ const Slider = () => {
             <label className="label p-2">m3</label>
             <input
               type="range"
-              min={0}
+              min="0"
               max="100"
               value="40"
-              className="range range-accent"
+              class="range range-xs"
             />
           </div>
 
@@ -18,10 +18,10 @@ const Slider = () => {
             <label className="label p-2">m3</label>
             <input
               type="range"
-              min={0}
+              min="0"
               max="100"
               value="40"
-              className="range range-accent"
+              class="range range-xs"
             />
           </div>
 
@@ -29,10 +29,10 @@ const Slider = () => {
             <label className="label p-2">m3</label>
             <input
               type="range"
-              min={0}
+              min="0"
               max="100"
               value="40"
-              className="range range-accent"
+              class="range range-xs"
             />
           </div>
         </div>

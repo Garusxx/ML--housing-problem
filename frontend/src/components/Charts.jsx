@@ -1,14 +1,18 @@
-const Chart = () => {
+import AreaChartComponent from "./AreaChartComponent";
+
+const Charts = () => {
   return (
     <div>
       <div>
-        <GridItem title="Area Chart"></GridItem>
+        <GridItem title="Area Chart">
+          <AreaChartComponent />
+        </GridItem>
       </div>
     </div>
   );
 };
 
-export default Chart;
+export default Charts;
 
 function GridItem({ title, children }) {
   return (
