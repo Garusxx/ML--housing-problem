@@ -13,6 +13,7 @@ import {
   Legend,
 } from "recharts";
 
+
 const dummyData = [
   {
     bedroom_count: 1,
@@ -50,53 +51,15 @@ const dummyData = [
     age: 66,
     price: 92118.32687438914,
   },
+  
 ];
 
-function normalizacji(tensor, min, max) {
-  return tf.tidy(() => {
-    const MIN_VALUES = min || tf.min(tensor, 0);
-    const MAX_VALUES = max || tf.max(tensor, 0);
 
-    const TENSOR_SB_MIN_VALUE = tf.sub(tensor, MIN_VALUES);
-    const RANGE_SIZE = tf.sub(MAX_VALUES, MIN_VALUES);
-    const NORMALIZED = tf.div(TENSOR_SB_MIN_VALUE, RANGE_SIZE);
-
-    return { NORMALIZED, MIN_VALUES, MAX_VALUES };
-  });
-}
 
 const AreaChartComponent = () => {
   dummyData.sort((a, b) => a.price - b.price);
 
-  useEffect(() => {
-    const inputs = dummyData.map((data) => [
-      data.center_distance,
-      data.metro_distance,
-    ]);
-
-    const outputs = dummyData.map((data) => data.price);
-
-
-    tf.util.shuffleCombo(inputs, outputs);
-
-    const inputsTensor = tf.tensor2d(inputs);
-    const outputsTensor = tf.tensor1d(outputs);
-
-    const RESUKTS = normalizacji(inputsTensor);
-    console.log("Normalize value")
-    RESUKTS.NORMALIZED.print();
-
-    console.log("Min value")
-    RESUKTS.MIN_VALUES.print();
-
-    console.log("Max value")
-    RESUKTS.MAX_VALUES.print();
-
-    inputsTensor.dispose();
-
-
-    dummyData.sort((a, b) => a.price - b.price);
-  }, []);
+  
 
   return (
     <ResponsiveContainer width="100%" height="100%">

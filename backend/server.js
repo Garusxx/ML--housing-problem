@@ -1,10 +1,13 @@
 import express from "express";
 import "./config.js";
-import { getHausing } from "./mySql.js";
+import { getHousing } from "./mySql.js";
+import cors from "cors";
 
 const PORT = process.env.PORT || 3000;
 
 const app = express();
+
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Yesss World!");
@@ -12,7 +15,7 @@ app.get("/", (req, res) => {
 
 app.get("/getHousing", async (req, res) => {
   try {
-    const housingData = await getHausing();
+    const housingData = await getHousing();
     res.json(housingData);
   } catch (err) {
     console.error(err);

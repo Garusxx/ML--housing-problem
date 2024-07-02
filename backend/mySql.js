@@ -9,7 +9,7 @@ const pool = mysql.createPool({
 }).promise();
 
 
-export async function getHausing() {
+export async function getHousing() {
     const [rows] = await pool.query('SELECT * FROM house');
     return rows;
 

@@ -1,7 +1,29 @@
-// import { useState } from "react";
+import React, { useEffect } from "react";
+import { useState } from "react";
 
-// const useGetHousing = () => {
-//   const [loading, setLoading] = useState(false);
-// };
+const useGetHousing = () => {
+  const [loading, setLoading] = useState(false);
+  const [housingData, setHousingData] = useState([]);
 
-// export default useGetHousing;
+  useEffect(() => {
+    const getHosingData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch("/api/getHousing");
+        const data = await response.json();
+        setHousingData(data);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+        setLoading(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getHosingData();
+  }, []);
+
+  return { loading, housingData };
+};
+
+
+export default useGetHousing;
