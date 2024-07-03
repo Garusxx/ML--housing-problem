@@ -9,7 +9,7 @@ const useGetHousing = () => {
     const getHosingData = async () => {
       setLoading(true);
       try {
-        const response = await fetch("/api/getHousing");
+        const response = await fetch("http://localhost:4000/getHousing");
         const data = await response.json();
         setHousingData(data);
       } catch (error) {
