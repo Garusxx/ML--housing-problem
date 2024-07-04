@@ -2,6 +2,9 @@ import AreaChartComponent from "./AreaChartComponent";
 import React, { useEffect } from "react";
 import * as tf from "@tensorflow/tfjs";
 import useGetHousing from "../hooks/useGetHousing";
+import { useState } from "react";
+
+import useTreningModelLR from "../hooks/useTreningModelLR";
 
 const chartData = [
   { center_distance: 1286.68, metro_distance: 204.0, price: 0 },
@@ -29,123 +32,58 @@ function normalize(tensor, min, max) {
   });
 }
 
-function evaluate(inputs, model, dataArr) {
-  const arr = [];
-  tf.tidy(() => {
-    let newInput = normalize(
+async function evaluate(inputs, model, dataArr) {
+  return tf.tidy(() => {
+    const newInput = normalize(
       tf.tensor2d(dataArr, [dataArr.length, dataArr[0].length]),
       inputs.MIN_VALUES,
       inputs.MAX_VALUES
     );
-    let output = model.predict(newInput.NORMALIZED);
-    arr.push(output.dataSync());
+    const output = model.predict(newInput.NORMALIZED);
+    const arr = output.dataSync();
     output.print();
+    console.log("Model disposed: " + tf.memory().numTensors);
+    return arr;
   });
-
-  console.log("Model disposed: " + tf.memory().numTensors);
-
-  return arr;
-}
-
-async function trainModel(model, inputsNorm, outputs) {
-  const learningRate = 0.01;
-  model.compile({
-    optimizer: tf.train.sgd(learningRate),
-    loss: "meanSquaredError",
-  });
-
-  let result = await model.fit(inputsNorm, outputs, {
-    validationSplit: 0.2,
-    shuffle: true,
-    batchSize: 64,
-    epochs: 20,
-  });
-
-  console.log(
-    "Avg error loss: " +
-      Math.sqrt(result.history.loss[result.history.loss.length - 1])
-  );
-  console.log(
-    "Avg validation error loss: " +
-      Math.sqrt(result.history.val_loss[result.history.val_loss.length - 1])
-  );
-
-  // Nie usuwaj modelu
-  outputs.dispose();
-  inputsNorm.dispose();
-
-  // Zwróć model
-  return model;
 }
 
 const Charts = () => {
-  const { loading, housingData } = useGetHousing();
+  const { mLoding, trainedModel, normalizeInputs } = useTreningModelLR();
+  const [updatedChartData, setUpdatedChartData] = useState(chartData);
 
   useEffect(() => {
-    if (!housingData || housingData.length === 0) {
-      console.log("No housing data available");
-      return;
-    }
+    (async () => {
+      console.log(trainedModel);
+      if (trainedModel) {
+        let dataPoints = chartData.map((data) => [
+          data.center_distance,
+          data.metro_distance,
+        ]);
 
-    const inputs = housingData.map((data) => [
-      data.center_distance,
-      data.metro_distance,
-    ]);
+        try {
+          const pricePredictions = await evaluate(
+            normalizeInputs.NORMALIZED,
+            trainedModel,
+            dataPoints
+          );
+          const newChartData = chartData.map((data, index) => ({
+            ...data,
+            price: pricePredictions[index], 
+          }));
+          setUpdatedChartData(newChartData); 
+          console.log(newChartData);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    })();
+  }, [trainedModel]);
 
-    if (inputs.length === 0 || inputs[0].length === 0) {
-      console.log("Inputs are not in the correct format");
-      return;
-    }
-
-    const outputs = housingData.map((data) => data.price);
-
-    tf.util.shuffleCombo(inputs, outputs);
-
-    const inputsTensor = tf.tensor2d(inputs, [inputs.length, inputs[0].length]);
-    const outputsTensor = tf.tensor1d(outputs);
-
-    const normalizeInputs = normalize(inputsTensor);
-    console.log("Normalize value");
-    normalizeInputs.NORMALIZED.print();
-
-    console.log("Min value");
-    normalizeInputs.MIN_VALUES.print();
-
-    console.log("Max value");
-    normalizeInputs.MAX_VALUES.print();
-
-    inputsTensor.dispose();
-
-    const model = tf.sequential();
-    model.add(tf.layers.dense({ units: 1, inputShape: [2] }));
-
-    model.summary();
-
-    trainModel(model, normalizeInputs.NORMALIZED, outputsTensor)
-      .then((trainedModel) => {
-        let dataPoints = [];
-        chartData.forEach((data) => {
-          dataPoints.push([data.center_distance, data.metro_distance]);
-        });
-        let pricePredictions = evaluate(
-          normalizeInputs.NORMALIZED,
-          trainedModel,
-          dataPoints
-        );
-
-        chartData.forEach((data, index) => {
-          data.price = pricePredictions[0][index];
-        });
-
-        console.log(chartData);
-      })
-      .catch(console.error);
-  }, [housingData]);
   return (
     <div>
       <div>
         <GridItem title="Area Chart">
-          <AreaChartComponent />
+        {mLoding ? <AreaChartComponent chartData={updatedChartData} /> : <p>Loading...</p>}
         </GridItem>
       </div>
     </div>

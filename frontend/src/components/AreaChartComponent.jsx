@@ -1,4 +1,5 @@
 import * as tf from "@tensorflow/tfjs";
+import { useState } from "react";
 
 ("use client");
 import { useEffect } from "react";
@@ -13,57 +14,16 @@ import {
   Legend,
 } from "recharts";
 
-
-const dummyData = [
-  {
-    bedroom_count: 1,
-    net_sqm: 26.18409786440993,
-    center_distance: 1286.68,
-    metro_distance: 204.0038172983832,
-    floor: 22,
-    age: 67,
-    price: 96004.80455671564,
-  },
-  {
-    bedroom_count: 1,
-    net_sqm: 34.86690091132422,
-    center_distance: 1855.25,
-    metro_distance: 186.9803604183612,
-    floor: 8,
-    age: 30,
-    price: 92473.7225680616,
-  },
-  {
-    bedroom_count: 1,
-    net_sqm: 36.980708990751,
-    center_distance: 692.09,
-    metro_distance: 111.22499920528696,
-    floor: 24,
-    age: 24,
-    price: 98112.5199416717,
-  },
-  {
-    bedroom_count: 1,
-    net_sqm: 17.445723141767346,
-    center_distance: 1399.49,
-    metro_distance: 237.9987599600729,
-    floor: 1,
-    age: 66,
-    price: 92118.32687438914,
-  },
-  
-];
-
-
-
-const AreaChartComponent = () => {
-  dummyData.sort((a, b) => a.price - b.price);
-
-  
+const AreaChartComponent = (props) => {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const sortedData = [...props.chartData].sort((a, b) => a.price - b.price);
+    setData(sortedData);
+  }, [props.chartData]);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <AreaChart width={600} height={400} data={dummyData}>
+      <AreaChart width={600} height={400} data={data}>
         <YAxis />
         <XAxis dataKey="price" />
         <CartesianGrid strokeDasharray="3 3" />
