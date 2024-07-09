@@ -24,9 +24,10 @@ async function trainModel(model, inputsNorm, outputs) {
   });
 
   let result = await model.fit(inputsNorm, outputs, {
-    validationSplit: 0.2,
+    validationSplit: 0.15,
     shuffle: true,
-    epochs: 20,
+    batchSize: 64,
+    epochs: 100,
   });
 
   console.log(
@@ -38,11 +39,9 @@ async function trainModel(model, inputsNorm, outputs) {
       Math.sqrt(result.history.val_loss[result.history.val_loss.length - 1])
   );
 
-  // Nie usuwaj modelu
   outputs.dispose();
   inputsNorm.dispose();
 
-  // Zwróć model
   return model;
 }
 
@@ -75,16 +74,14 @@ const useTreningModelLR = () => {
     const inputsTensor = tf.tensor2d(inputs, [inputs.length, inputs[0].length]);
     const outputsTensor = tf.tensor1d(outputs);
 
+    console.log("Inputs tensor");
+    inputsTensor.print();
+    console.log("Outputs tensor");
+    outputsTensor.print();
+
     setNormalizeInputs(normalize(inputsTensor));
-
-    // console.log("Normalize value");
-    // normalizeInputs.NORMALIZED.print();
-
-    // console.log("Min value");
-    // normalizeInputs.MIN_VALUES.print();
-
-    // console.log("Max value");
-    // normalizeInputs.MAX_VALUES.print();
+    console.log("Normalized inputs");
+    outputsTensor.print();
 
     inputsTensor.dispose();
 

@@ -16,6 +16,7 @@ import {
 
 const AreaChartComponent = (props) => {
   const [data, setData] = useState([]);
+
   useEffect(() => {
     const sortedData = [...props.chartData].sort((a, b) => a.price - b.price);
     setData(sortedData);
@@ -23,7 +24,7 @@ const AreaChartComponent = (props) => {
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <AreaChart width={600} height={400} data={data}>
+      <AreaChart width={600} height={400} data={data}>s
         <YAxis />
         <XAxis dataKey="price" />
         <CartesianGrid strokeDasharray="3 3" />
