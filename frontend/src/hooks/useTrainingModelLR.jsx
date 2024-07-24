@@ -94,7 +94,7 @@ const useTreningModelLR = () => {
           randomData.push({
             center_distance: selectedData.center_distance,
             metro_distance: selectedData.metro_distance,
-            price: `$${selectedData.price.toFixed(2)}`,
+            price: selectedData.price.toFixed(2),
           });
         }
       }
@@ -103,8 +103,6 @@ const useTreningModelLR = () => {
     };
 
     createRandomData(housingData);
-    console.log("Random data");
-    console.log(randomData);
 
 
     const inputs = housingData.map((data) => [
