@@ -12,10 +12,6 @@ const app = express();
 
 app.use(cors());
 
-app.get("/", (req, res) => {
-  res.send("Yesss World!");
-});
-
 app.get("/getHousing", async (req, res) => {
   try {
     const housingData = await getHousing();
