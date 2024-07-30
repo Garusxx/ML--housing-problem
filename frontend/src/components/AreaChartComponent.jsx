@@ -55,13 +55,11 @@ const CustomTooltip = ({ active, payload, label }) => {
       <div className="bg-slate-900 p-4 border border-gray-600">
         <p className="label">{`${payload[0].name} : ${parseFloat(
           payload[0].value
-        ).toFixed(2)}`}</p>
+        )}`}</p>
         <p className="label">{`${payload[1].name} : ${parseFloat(
           payload[1].value
-        ).toFixed(2)}`}</p>
-        <p className="label">{`${"price"} : ${parseFloat(label).toFixed(
-          2
         )}`}</p>
+        <p className="label">{`${"price"} : ${parseFloat(label)}`}</p>
       </div>
     );
   }

@@ -53,6 +53,7 @@ const useTreningModelLR = () => {
   const [randomData, setRandomData] = useState([]);
 
   function evaluate(data ) {
+
     let outputData;
   
     tf.tidy(() => {
@@ -94,7 +95,7 @@ const useTreningModelLR = () => {
           randomData.push({
             center_distance: selectedData.center_distance,
             metro_distance: selectedData.metro_distance,
-            price: selectedData.price.toFixed(2),
+            price: selectedData.price,
           });
         }
       }

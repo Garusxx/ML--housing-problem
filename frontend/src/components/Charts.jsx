@@ -65,7 +65,7 @@ const Charts = () => {
           if (evaluatedPrice) {
             return {
               ...item,
-              price: evaluatedPrice.toFixed(2),
+              price: evaluatedPrice,
             };
           } else {
             console.error("Evaluated price is undefined for item:", item);
@@ -85,9 +85,9 @@ const Charts = () => {
   }, [mLoding]);
 
   return (
-    <div className="p-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="col-span-1 md:col-span-1">
+    <div className="p-4 flex justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-screen-lg">
+        <div className="col-span-1 md:col-span-1 flex justify-center">
           <GridItem title="Actual Housing Data">
             {mLoding && loadingPredictions ? (
               <AreaChartComponent chartData={randomData} />
@@ -96,6 +96,7 @@ const Charts = () => {
             )}
           </GridItem>
         </div>
+
         <div className="flex flex-col items-center justify-center">
           <h2 className="text-center text-3xl font-bold w-full text-white">
             Description:
@@ -112,7 +113,8 @@ const Charts = () => {
             data-driven property price predictions.
           </p>
         </div>
-        <div className="col-span-1 md:col-span-1">
+
+        <div className="col-span-1 md:col-span-1 flex justify-center">
           <GridItem title="Predicted Housing Prices">
             {mLoding && loadingPredictions ? (
               <AreaChartComponent chartData={predictedData} />
@@ -121,6 +123,7 @@ const Charts = () => {
             )}
           </GridItem>
         </div>
+
         <div className="col-span-1 md:col-span-1 flex flex-col items-center">
           <h2 className="text-center text-3xl font-bold w-full text-white">
             Estimate Property Value
@@ -167,7 +170,7 @@ const Charts = () => {
             </div>
             <div className="w-1/2 flex flex-col items-center justify-center bg-gray-900 p-4 rounded text-xl text-white">
               <p>Price deduction:</p>
-              <p> ${predictedValue.toFixed(2)}</p>
+              <p>${predictedValue}</p>
             </div>
           </div>
         </div>
@@ -175,12 +178,11 @@ const Charts = () => {
     </div>
   );
 };
-
 export default Charts;
 
 function GridItem({ title, children }) {
   return (
-    <div className="flex flex-col items-center justify-center p-4 border border-slate-900 bg-slate-900/50 rounded-xl h-[300px] w-[700px] ml-4">
+    <div className="flex flex-col items-center justify-center p-4 border border-slate-900 bg-slate-900/50 rounded-xl h-[300px] w-[700px]">
       <h3 className="text-2xl font-semibold text-white mb-4">{title}</h3>
       {children}
     </div>
