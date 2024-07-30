@@ -9,7 +9,7 @@ const useGetHousing = () => {
     const getHosingData = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:4000/getHousing");
+        const response = await fetch("https://ml-housing-problem.onrender.com/getHousing");
         const data = await response.json();
         setHousingData(data);
       } catch (error) {
